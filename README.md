@@ -1,43 +1,63 @@
-````markdown
 # 🎙️ Flutter Speak to Type
 
-A clean and reusable Flutter widget that brings **speech-to-text input directly into a text field**.
+A customizable Flutter speech-to-text input package that allows users to **type normally or convert spoken English into text directly inside a text field**.
 
-Type normally, tap the microphone, and speak. The recognized English speech is automatically added to the text field.
+The package provides a reusable text field with an integrated microphone button, listening state, speech result callbacks, and customizable styling.
 
 <p align="center">
   <img src="example/assets/demo.gif" alt="Flutter Speak to Type Demo" width="320"/>
 </p>
 
----
+## Features
 
-## ✨ Features
+* 🎤 Speech-to-text input
+* ⌨️ Normal text typing
+* 📝 Add spoken text directly into the text field
+* 🔴 Listening state indicator
+* 🔄 Start and stop speech recognition
+* 💬 Speech result callback
+* ✏️ Text change callback
+* 🎨 Custom microphone color
+* 🔴 Custom listening color
+* 🖌️ Custom text style
+* 📝 Custom hint style
+* 🎛️ Custom `InputDecoration`
+* 📏 Single-line text field support
+* 📄 Multi-line text field support
+* 🎮 External `TextEditingController`
+* ⚡ Lightweight and easy to integrate
+* 🛡️ Speech recognition error handling
+* 📱 Android microphone permission support
+* 🍎 iOS speech recognition support
 
-- 🎤 **Speech-to-text input**
-- ⌨️ **Normal text typing**
-- 📝 **Append speech to existing text**
-- 🔴 **Live listening indicator**
-- 🎨 **Custom microphone colors**
-- 🎨 **Custom text and hint styles**
-- 🧩 **Custom `InputDecoration` support**
-- 📏 **Single-line and multi-line support**
-- 🔄 **Listening state callback**
-- 💬 **Speech result callback**
-- ⚡ **Simple integration**
-- 🛡️ **Speech recognition error handling**
-- 📱 **Android microphone permission support**
-- 🍎 **iOS speech recognition configuration**
+## Preview
 
----
+[Flutter Speak to Type Demo](https://github.com/Excelsior-Technologies-Community/flutter_speak_to_type/blob/stage/example/assets/demo.gif)
 
-## 📦 Installation
+<p align="center">
+  <img src="example/assets/demo.gif" alt="Flutter Speak to Type Demo" width="320"/>
+</p>
 
-Add the package to your `pubspec.yaml`:
+## Installation
+
+Add the package to your `pubspec.yaml`.
+
+### Local Package
+
+```yaml
+dependencies:
+  flutter_speak_to_type:
+    path: ../
+```
+
+### Pub.dev
+
+After publishing the package, add the latest version:
 
 ```yaml
 dependencies:
   flutter_speak_to_type: ^1.0.0
-````
+```
 
 Then run:
 
@@ -45,11 +65,19 @@ Then run:
 flutter pub get
 ```
 
-> Make sure to use the latest version available for your project.
+## Dependencies
 
----
+The package uses:
 
-## 🚀 Quick Start
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+
+  speech_to_text: ^7.3.0
+```
+
+## Basic Usage
 
 Import the package:
 
@@ -57,31 +85,26 @@ Import the package:
 import 'package:flutter_speak_to_type/flutter_speak_to_type.dart';
 ```
 
-Then use `SpeakToTypeField` anywhere you normally use a text field:
+Add the `SpeakToTypeField`:
 
 ```dart
 SpeakToTypeField(
   hintText: 'Start speaking...',
-  onSpeechResult: (text) {
-    print(text);
-  },
 )
 ```
 
-That's it.
+The widget provides a text field with an integrated microphone button.
 
-The widget provides the text field, microphone button, speech recognition, and listening state handling.
+Tap the microphone and speak. The recognized English speech is added to the text field.
 
----
-
-## 🎯 Basic Example
+## Complete Example
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_speak_to_type/flutter_speak_to_type.dart';
 
-class ExampleScreen extends StatelessWidget {
-  const ExampleScreen({super.key});
+class SpeakToTypePage extends StatelessWidget {
+  const SpeakToTypePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +116,7 @@ class ExampleScreen extends StatelessWidget {
         padding: EdgeInsets.all(16),
         child: SpeakToTypeField(
           hintText: 'Tap the microphone and start speaking...',
+          maxLines: 5,
         ),
       ),
     );
@@ -100,11 +124,9 @@ class ExampleScreen extends StatelessWidget {
 }
 ```
 
----
+## Using TextEditingController
 
-## 📝 Using a TextEditingController
-
-Use your own `TextEditingController` when you need to read, update, or clear the text.
+You can provide your own `TextEditingController` when you need to access or control the text.
 
 ```dart
 final TextEditingController controller = TextEditingController();
@@ -115,39 +137,45 @@ SpeakToTypeField(
 )
 ```
 
-You can access the current value at any time:
+Read the current text:
 
 ```dart
 print(controller.text);
 ```
 
-### Speech is added to existing text
+Clear the text:
 
-If the field already contains:
+```dart
+controller.clear();
+```
+
+## Adding Speech to Existing Text
+
+The package can add spoken text after the text that is already present in the field.
+
+For example, if the existing text is:
 
 ```text
 Hello
 ```
 
-and the user says:
+and the user speaks:
 
 ```text
 How are you?
 ```
 
-the result becomes:
+the text becomes:
 
 ```text
 Hello How are you?
 ```
 
-This allows users to continue writing without losing their existing text.
+This allows users to continue writing without removing their existing content.
 
----
+## Listening State
 
-## 🎤 Listening State
-
-Use `onListeningChanged` when your application needs to know whether speech recognition is active.
+Use `onListeningChanged` to detect when speech recognition starts or stops.
 
 ```dart
 SpeakToTypeField(
@@ -157,14 +185,14 @@ SpeakToTypeField(
 )
 ```
 
-This can be useful when you want to:
+The callback returns:
 
-* Show a custom listening indicator
-* Update another widget
-* Disable another action while listening
-* Display custom status text
+```text
+true  → Speech recognition is active
+false → Speech recognition has stopped
+```
 
-Example:
+You can use this to display your own listening indicator:
 
 ```dart
 bool isListening = false;
@@ -178,27 +206,32 @@ SpeakToTypeField(
 )
 ```
 
----
-
-## 💬 Speech Result
+## Speech Result
 
 Use `onSpeechResult` to receive the recognized speech.
 
 ```dart
 SpeakToTypeField(
   onSpeechResult: (text) {
-    print('Recognized speech: $text');
+    print('Speech: $text');
   },
 )
 ```
 
-The callback receives the recognized text as a `String`.
+This is useful when your application needs to perform additional work with the recognized text.
 
----
+For example:
 
-## ⌨️ Text Changes
+* Search
+* Commands
+* Form input
+* Notes
+* Messages
+* Voice-based input
 
-The widget also supports the standard Flutter `onChanged` callback.
+## Text Changes
+
+Use `onChanged` to receive text changes from both normal typing and speech input.
 
 ```dart
 SpeakToTypeField(
@@ -208,243 +241,212 @@ SpeakToTypeField(
 )
 ```
 
-This works for both:
+This behaves similarly to the standard Flutter `TextField` `onChanged` callback.
 
-* Manually typed text
-* Speech-generated text
+## Multi-line Input
 
----
-
-## 📏 Multi-line Input
-
-Use `maxLines` when you need a larger text area.
+The field supports multi-line text input using `maxLines`.
 
 ```dart
 SpeakToTypeField(
+  hintText: 'Write or speak something...',
   maxLines: 5,
-  hintText: 'Speak your message...',
 )
 ```
 
-For example:
+For a larger text area:
 
 ```dart
 SpeakToTypeField(
-  maxLines: 8,
-  hintText: 'Write or speak your message...',
+  hintText: 'Enter your description...',
+  maxLines: 10,
 )
 ```
 
----
+## Custom Styling
 
-## 🎨 Custom Styling
+### Microphone Color
 
-You can customize the microphone colors and text styles.
+Customize the microphone icon color:
 
 ```dart
 SpeakToTypeField(
-  hintText: 'Tap the microphone...',
+  micColor: Colors.blue,
+)
+```
+
+### Listening Color
+
+Customize the microphone color while speech recognition is active:
+
+```dart
+SpeakToTypeField(
   micColor: Colors.grey,
   listeningColor: Colors.red,
+)
+```
+
+### Text Style
+
+Customize the text appearance:
+
+```dart
+SpeakToTypeField(
   textStyle: const TextStyle(
     fontSize: 16,
+    fontWeight: FontWeight.w500,
   ),
+)
+```
+
+### Hint Style
+
+Customize the hint:
+
+```dart
+SpeakToTypeField(
+  hintText: 'Speak something...',
   hintStyle: const TextStyle(
+    fontSize: 15,
     color: Colors.grey,
   ),
 )
 ```
 
-### Available styling options
-
-| Property         | Description                      |
-| ---------------- | -------------------------------- |
-| `micColor`       | Microphone color when idle       |
-| `listeningColor` | Microphone color while listening |
-| `textStyle`      | Style of the entered text        |
-| `hintStyle`      | Style of the hint text           |
-
----
-
-## 🧩 Custom InputDecoration
+## Custom InputDecoration
 
 You can provide your own Flutter `InputDecoration`.
 
 ```dart
 SpeakToTypeField(
+  hintText: 'Speak something...',
   decoration: const InputDecoration(
-    hintText: 'Enter your message',
     border: OutlineInputBorder(),
+    filled: true,
   ),
 )
 ```
 
-The package automatically adds the microphone button to the field while preserving your custom decoration.
+The package automatically adds the microphone button to the provided decoration.
 
-For example:
+## Enable or Disable
+
+The widget can be enabled or disabled.
+
+### Enabled
 
 ```dart
 SpeakToTypeField(
-  decoration: InputDecoration(
-    hintText: 'Write something...',
-    filled: true,
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.all(
-        Radius.circular(12),
-      ),
-    ),
-  ),
+  enabled: true,
 )
 ```
 
----
-
-## 🎛️ Enable / Disable
-
-The widget can be enabled or disabled using the `enabled` property.
+### Disabled
 
 ```dart
 SpeakToTypeField(
   enabled: false,
-  hintText: 'Input disabled',
 )
 ```
 
-By default:
+When disabled, the text field and microphone interaction are disabled.
 
-```dart
-enabled: true
+## API Reference
+
+### SpeakToTypeField
+
+| Property             | Type                     | Default              | Description                         |
+| -------------------- | ------------------------ | -------------------- | ----------------------------------- |
+| `controller`         | `TextEditingController?` | `null`               | Controls the text field             |
+| `hintText`           | `String?`                | `Speak something...` | Hint displayed inside the field     |
+| `maxLines`           | `int`                    | `1`                  | Maximum number of text lines        |
+| `enabled`            | `bool`                   | `true`               | Enables or disables the field       |
+| `onChanged`          | `ValueChanged<String>?`  | `null`               | Called when text changes            |
+| `onSpeechResult`     | `ValueChanged<String>?`  | `null`               | Called when speech is recognized    |
+| `onListeningChanged` | `ValueChanged<bool>?`    | `null`               | Called when listening state changes |
+| `micColor`           | `Color?`                 | `Colors.grey`        | Microphone icon color               |
+| `listeningColor`     | `Color?`                 | `Colors.red`         | Microphone color while listening    |
+| `decoration`         | `InputDecoration?`       | `null`               | Custom field decoration             |
+| `textStyle`          | `TextStyle?`             | `null`               | Text style                          |
+| `hintStyle`          | `TextStyle?`             | `null`               | Hint text style                     |
+
+## How It Works
+
+The package uses the `speech_to_text` package internally for speech recognition.
+
+The basic flow is:
+
+```text
+User taps microphone
+        ↓
+Speech recognition starts
+        ↓
+User speaks
+        ↓
+Speech is converted to text
+        ↓
+Recognized text appears in TextField
+        ↓
+Callbacks are triggered
 ```
 
----
+Users can stop recognition at any time by tapping the microphone again.
 
-## 📱 Android Setup
+## Platform Setup
 
-The application using this package needs microphone permission.
+### Android
 
-Open:
+Add the microphone permission to:
 
 ```text
 android/app/src/main/AndroidManifest.xml
 ```
 
-Add:
+Inside the `<manifest>` tag:
 
 ```xml
 <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 ```
 
-Example:
+The application should request microphone access before using speech recognition.
 
-```xml
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+### iOS
 
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-
-    <application
-        android:label="your_app"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
-
-        ...
-
-    </application>
-
-</manifest>
-```
-
-The permission must be placed inside the `<manifest>` element.
-
----
-
-## 🍎 iOS Setup
-
-For iOS, add the required microphone and speech recognition descriptions to:
+Add the following permissions to:
 
 ```text
 ios/Runner/Info.plist
 ```
 
-Add:
-
 ```xml
-<key>NSMicrophoneUsageDescription</key>
-<string>This app uses the microphone for speech to text.</string>
-
 <key>NSSpeechRecognitionUsageDescription</key>
 <string>This app uses speech recognition to convert your voice into text.</string>
+
+<key>NSMicrophoneUsageDescription</key>
+<string>This app requires microphone access for speech-to-text input.</string>
 ```
 
-These descriptions are required when the application requests microphone and speech recognition access.
+## Important Notes
 
----
+* The package currently supports **English speech input**.
+* Speech recognition availability depends on the device and operating system.
+* Microphone permission is required.
+* Recognition behavior can vary between Android and iOS devices.
+* The package does not save or upload audio recordings.
+* The recognized text is returned directly to the Flutter application.
+* The package is intended for speech-to-text input rather than background or always-on voice recognition.
 
-## 🔧 How It Works
+## Example App
 
-`Flutter Speak to Type` combines a normal Flutter `TextField` with speech recognition.
-
-The main widget handles:
-
-```text
-TextField
-   │
-   ├── Manual typing
-   │
-   ├── Microphone button
-   │
-   ├── Speech recognition
-   │
-   ├── Recognized text
-   │
-   └── Listening state
-```
-
-Internally, the package uses the [`speech_to_text`](https://pub.dev/packages/speech_to_text) package for speech recognition.
-
-This keeps the speech recognition logic inside the package so applications can simply use:
-
-```dart
-SpeakToTypeField()
-```
-
-instead of implementing the microphone and speech handling themselves.
-
----
-
-## 📚 API Reference
-
-### `SpeakToTypeField`
-
-| Property             | Type                     | Default       | Description                         |
-| -------------------- | ------------------------ | ------------- | ----------------------------------- |
-| `controller`         | `TextEditingController?` | `null`        | Controls the text field             |
-| `hintText`           | `String?`                | `null`        | Hint displayed inside the field     |
-| `maxLines`           | `int`                    | `1`           | Maximum number of lines             |
-| `enabled`            | `bool`                   | `true`        | Enables or disables the field       |
-| `onChanged`          | `ValueChanged<String>?`  | `null`        | Called whenever the text changes    |
-| `onSpeechResult`     | `ValueChanged<String>?`  | `null`        | Returns recognized speech           |
-| `onListeningChanged` | `ValueChanged<bool>?`    | `null`        | Returns the current listening state |
-| `micColor`           | `Color?`                 | `Colors.grey` | Microphone color when idle          |
-| `listeningColor`     | `Color?`                 | `Colors.red`  | Microphone color while listening    |
-| `decoration`         | `InputDecoration?`       | `null`        | Custom text field decoration        |
-| `textStyle`          | `TextStyle?`             | `null`        | Text style                          |
-| `hintStyle`          | `TextStyle?`             | `null`        | Hint style                          |
-
----
-
-## 🧪 Example Application
-
-A complete example application is included in the `example` directory.
-
-The example demonstrates:
+The package includes an example application demonstrating:
 
 * Speech-to-text input
-* Manual text editing
-* Custom styling
-* Listening status
-* Speech result display
-* Clear text functionality
+* Normal text editing
+* Listening state
+* Speech result
 * Multi-line input
+* Custom styling
+* Clear text functionality
 
 Run the example:
 
@@ -454,81 +456,107 @@ flutter pub get
 flutter run
 ```
 
----
-
-## 📂 Project Structure
+## Project Structure
 
 ```text
 flutter_speak_to_type/
 │
-├── example/
-│   ├── assets/
-│   │   └── demo.gif
-│   │
-│   └── lib/
-│       └── main.dart
-│
 ├── lib/
+│   ├── flutter_speak_to_type.dart
+│   │
 │   ├── models/
 │   │   └── speak_to_type_result.dart
 │   │
 │   ├── services/
 │   │   └── speech_service.dart
 │   │
-│   ├── widgets/
-│   │   └── speak_to_type_field.dart
-│   │
-│   └── flutter_speak_to_type.dart
+│   └── widgets/
+│       └── speak_to_type_field.dart
 │
-├── analysis_options.yaml
-├── CHANGELOG.md
-├── LICENSE
+├── example/
+│   ├── lib/
+│   │   └── main.dart
+│   │
+│   └── assets/
+│       └── demo.gif
+│
 ├── pubspec.yaml
-└── README.md
+├── README.md
+└── LICENSE
 ```
 
----
+## Requirements
 
-## 📦 Dependency
+* Flutter 3.35.5 or compatible
+* Dart 3.9.2 or compatible
+* Android or iOS device with speech recognition support
 
-This package uses:
+## Running the Example
 
-* [`speech_to_text`](https://pub.dev/packages/speech_to_text)
+Clone the repository:
 
-The speech recognition functionality is provided by the underlying platform speech recognition services through this dependency.
+```bash
+git clone https://github.com/Excelsior-Technologies-Community/flutter_speak_to_type.git
+```
 
----
+Enter the project:
 
+```bash
+cd flutter_speak_to_type
+```
 
+Get dependencies:
 
-## ⚠️ Important Notes
+```bash
+flutter pub get
+```
 
-Speech recognition depends on the device's available speech recognition service.
+Run the example:
 
-For the best experience:
+```bash
+cd example
+flutter pub get
+flutter run
+```
 
-* Make sure microphone permission is granted.
-* Make sure the device has a working speech recognition service.
-* Speech recognition behavior may vary between Android and iOS devices.
-* Network availability may affect speech recognition depending on the device's recognition service.
+## Contributing
 
+Contributions, issues, and feature requests are welcome.
 
-## 📄 License
+If you find a bug or have an idea for improvement, feel free to open an issue or submit a pull request.
+
+Before submitting changes, make sure the project passes:
+
+```bash
+flutter analyze
+```
+
+## License
+
+This package is released under the MIT License.
 
 MIT License
- 
+
+ 
+
 Copyright (c) 2026 Excelsior Technologies
- 
+
+ 
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
- 
+
+ 
+
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
- 
+
+ 
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -536,6 +564,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-
-One thing you should verify before pushing: **your actual package version in `pubspec.yaml`**. If it isn't `1.0.0`, replace `^1.0.0` in the README with your real published version.
