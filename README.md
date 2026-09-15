@@ -4,9 +4,7 @@ A customizable Flutter speech-to-text input package that allows users to **type 
 
 The package provides a reusable text field with an integrated microphone button, listening state, speech result callbacks, and customizable styling.
 
-<p align="center">
-  <img src="example/assets/demo.gif" alt="Flutter Speak to Type Demo" width="320"/>
-</p>
+
 
 ## Features
 
